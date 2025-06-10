@@ -58,7 +58,7 @@ const AmountArrow = ({ amount }) => (
   <div className="flex items-center space-x-2">
     <ArrowRight className="h-5 w-5 text-slate-400" />
     <div className="px-4 py-2 bg-emerald-100 rounded-lg">
-      <p className="text-lg font-bold text-emerald-700">${amount.toFixed(2)}</p>
+      <p className="text-lg font-bold text-emerald-700">₹{amount.toFixed(2)}</p>
     </div>
     <ArrowRight className="h-5 w-5 text-slate-400" />
   </div>
@@ -126,28 +126,28 @@ export default function Settlements() {
   const [settlementSummary, setSettlementSummary] = useState(null);
   const [loading, setLoading] = useState(true);
 
- const loadSettlements = async () => {
-  try {
-    setLoading(true);
-    const response = await api.getSettlements();
+  const loadSettlements = async () => {
+    try {
+      setLoading(true);
+      const response = await api.getSettlements();
 
-    if (response.success && Array.isArray(response.data)) {
-      const settlements = response.data;
+      if (response.success && Array.isArray(response.data)) {
+        const settlements = response.data;
 
-      // Calculate total debts by summing amounts
-      const totalDebts = settlements.reduce((sum, s) => sum + s.amount, 0);
+        // Calculate total debts by summing amounts
+        const totalDebts = settlements.reduce((sum, s) => sum + s.amount, 0);
 
-      setSettlementSummary({ settlements, totalDebts });
-    } else {
+        setSettlementSummary({ settlements, totalDebts });
+      } else {
+        setSettlementSummary(null);
+      }
+    } catch (error) {
+      console.error('Failed to load settlements:', error);
       setSettlementSummary(null);
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error('Failed to load settlements:', error);
-    setSettlementSummary(null);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
 
   useEffect(() => {
@@ -166,7 +166,8 @@ export default function Settlements() {
         <SummaryCard
           icon={DollarSign}
           title="Total Debts to Settle"
-          value={`$${totalDebts.toFixed(2)}`}
+          // Changed to Rupee symbol
+          value={`₹${totalDebts.toFixed(2)}`} 
         />
         <SummaryCard
           icon={Users}
