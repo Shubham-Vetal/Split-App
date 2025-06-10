@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:4000/api/split';
+const BASE_URL = 'https://split-app-zpq4.onrender.com/api/split';
 
 export const api = {
   // Expense APIs
