@@ -12,7 +12,7 @@ const SummaryCards = ({ totalOwed, totalOwes, peopleCount }) => (
         </div>
         <div className="ml-4">
           <p className="text-sm font-medium text-slate-600">Total Owed to Others</p>
-          <p className="text-2xl font-bold text-green-600">${totalOwed.toFixed(2)}</p>
+          <p className="text-2xl font-bold text-green-600">₹{totalOwed.toFixed(2)}</p>{/* Changed here */}
         </div>
       </div>
     </div>
@@ -24,7 +24,7 @@ const SummaryCards = ({ totalOwed, totalOwes, peopleCount }) => (
         </div>
         <div className="ml-4">
           <p className="text-sm font-medium text-slate-600">Total Owes to Others</p>
-          <p className="text-2xl font-bold text-red-600">${totalOwes.toFixed(2)}</p>
+          <p className="text-2xl font-bold text-red-600">₹{totalOwes.toFixed(2)}</p>{/* Changed here */}
         </div>
       </div>
     </div>
@@ -61,7 +61,7 @@ const BalanceItem = ({ balance }) => {
 
       <div className="mb-4">
         <div className={`text-2xl font-bold ${amountColor}`}>
-          ${Math.abs(bal).toFixed(2)}
+          ₹{Math.abs(bal).toFixed(2)} {/* Changed here */}
         </div>
         <p className="text-sm text-slate-500">{description}</p>
       </div>
@@ -74,7 +74,7 @@ const BalanceItem = ({ balance }) => {
               {Object.entries(owedBy).map(([person, amount]) => (
                 <div key={person} className="flex justify-between items-center text-sm">
                   <span className="text-slate-600">{person}</span>
-                  <span className="font-medium text-green-600">${amount.toFixed(2)}</span>
+                  <span className="font-medium text-green-600">₹{amount.toFixed(2)}</span>{/* Changed here */}
                 </div>
               ))}
             </div>
@@ -88,7 +88,7 @@ const BalanceItem = ({ balance }) => {
               {Object.entries(owes).map(([person, amount]) => (
                 <div key={person} className="flex justify-between items-center text-sm">
                   <span className="text-slate-600">{person}</span>
-                  <span className="font-medium text-red-600">${amount.toFixed(2)}</span>
+                  <span className="font-medium text-red-600">₹{amount.toFixed(2)}</span>{/* Changed here */}
                 </div>
               ))}
             </div>
@@ -150,28 +150,28 @@ const Balances = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
- const loadBalances = async () => {
-  try {
-    setLoading(true);
-    const response = await api.getBalances();
-    if (response.success && response.data) {
-      const balancesArray = Object.entries(response.data).map(([person, balance]) => ({
-        person,
-        balance,
-        owedBy: {},
-        owes: {},
-      }));
-      setBalances(balancesArray);
-    } else {
+  const loadBalances = async () => {
+    try {
+      setLoading(true);
+      const response = await api.getBalances();
+      if (response.success && response.data) {
+        const balancesArray = Object.entries(response.data).map(([person, balance]) => ({
+          person,
+          balance,
+          owedBy: {},
+          owes: {},
+        }));
+        setBalances(balancesArray);
+      } else {
+        setBalances([]);
+      }
+    } catch (error) {
+      console.error('Failed to load balances:', error);
       setBalances([]);
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error('Failed to load balances:', error);
-    setBalances([]);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   useEffect(() => {
     loadBalances();
